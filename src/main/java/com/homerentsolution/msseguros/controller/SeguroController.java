@@ -2,13 +2,14 @@ package com.homerentsolution.msseguros.controller;
 
 import com.homerentsolution.msseguros.dto.SeguroRequestDTO;
 import com.homerentsolution.msseguros.dto.SeguroResponseDTO;
-import com.homerentsolution.msseguros.model.Seguro;
 import com.homerentsolution.msseguros.service.SeguroService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,17 +26,18 @@ public class SeguroController {
     private static final Logger log =
             LoggerFactory.getLogger(SeguroController.class);
 
-    //buscar la lista completa, ResponseEntity responde 200 OK
+    // Listar todos los seguros
     @GetMapping
-    public ResponseEntity<List<Seguro>> listar() {
+    public ResponseEntity<List<SeguroResponseDTO>> listar() {
 
         log.info("Listando todos los seguros");
 
         return ResponseEntity.ok(
-                service.listar());
+                service.listar()
+        );
     }
 
-    //crear datos en dto,ResponseEntity devuelve 201 created
+    // Crear seguro
     @PostMapping
     public ResponseEntity<SeguroResponseDTO> guardar(
             @Valid @RequestBody SeguroRequestDTO dto) {
@@ -54,72 +56,97 @@ public class SeguroController {
                 .body(respuesta);
     }
 
-    //buscar por Id,ResponseEntity responde HTTP 200 OK
+    // Buscar por ID
     @GetMapping("/{id}")
-    public ResponseEntity<Seguro> buscar(
+    public ResponseEntity<SeguroResponseDTO> buscar(
             @PathVariable Long id) {
-        log.info("Buscando seguro con ID: {}", id);
+
+        log.info(
+                "Buscando seguro con ID: {}",
+                id
+        );
 
         return ResponseEntity.ok(
-                service.buscarPorId(id));
+                service.buscarPorId(id)
+        );
     }
 
-    // actualizar por Id, ResponseEntity devuelve respuesta HTTP 200 OK
+    // Actualizar
     @PutMapping("/{id}")
     public ResponseEntity<SeguroResponseDTO> actualizar(
             @PathVariable Long id,
             @Valid @RequestBody SeguroRequestDTO dto) {
 
-        log.info("Actualizando seguro con ID: {}", id);
+        log.info(
+                "Actualizando seguro con ID: {}",
+                id
+        );
 
         SeguroResponseDTO actualizado =
                 service.actualizar(id, dto);
 
-        return ResponseEntity.ok(actualizado);
+        return ResponseEntity.ok(
+                actualizado
+        );
     }
 
-    //eliminar seguro por Id, ResponseEntity devuelve respuesta HTTP 204 NO CONTENT
+    // Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(
             @PathVariable Long id) {
 
-        log.warn("Eliminando seguro con ID: {}", id);
+        log.warn(
+                "Eliminando seguro con ID: {}",
+                id
+        );
 
         service.eliminar(id);
 
         return ResponseEntity.noContent().build();
     }
 
-    // Buscar seguros por tipo,ResponseEntity devuelve respuesta HTTP 200 OK
+    // Buscar por tipo
     @GetMapping("/tipo/{tipo}")
-    public ResponseEntity<List<Seguro>> buscarPorTipo(
+    public ResponseEntity<List<SeguroResponseDTO>> buscarPorTipo(
             @PathVariable String tipo) {
 
-        log.info("Buscando seguros del tipo: {}", tipo);
+        log.info(
+                "Buscando seguros del tipo: {}",
+                tipo
+        );
 
         return ResponseEntity.ok(
-                service.buscarPorTipo(tipo));
+                service.buscarPorTipo(tipo)
+        );
     }
 
-    // Buscar seguros por reserva, ResponseEntity devuelve respuesta HTTP 200 OK
+    // Buscar por reserva
     @GetMapping("/reserva/{id}")
-    public ResponseEntity<List<Seguro>> buscarPorReserva(
+    public ResponseEntity<List<SeguroResponseDTO>> buscarPorReserva(
             @PathVariable Long id) {
 
-        log.info("Buscando seguros para reserva con ID: {}", id);
+        log.info(
+                "Buscando seguros para reserva con ID: {}",
+                id
+        );
 
         return ResponseEntity.ok(
-                service.buscarPorReserva(id));
+                service.buscarPorReserva(id)
+        );
     }
 
-    // Buscar seguros ordenados por cobertura según tipo, ResponseEntity responde 200 OK
+    // Buscar ordenados por cobertura
     @GetMapping("/tipo/ordenado/{tipo}")
-    public ResponseEntity<List<Seguro>> buscarPorTipoOrdenado(
+    public ResponseEntity<List<SeguroResponseDTO>> buscarPorTipoOrdenado(
             @PathVariable String tipo) {
 
-        log.info("Buscando seguros ordenados por cobertura del tipo: {}", tipo);
+        log.info(
+                "Buscando seguros ordenados por cobertura del tipo: {}",
+                tipo
+        );
 
         return ResponseEntity.ok(
-                service.buscarPorTipoOrdenado(tipo));
+                service.buscarPorTipoOrdenado(tipo)
+        );
     }
 }
