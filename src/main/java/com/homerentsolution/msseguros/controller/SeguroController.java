@@ -14,8 +14,17 @@ import org.springframework.web.bind.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
+import java.util.List;
+// Agrupa todos los endpoints de seguros en una seccion de Swagger
+@Tag(
+        name = "Seguros",
+        description = "Operaciones relacionadas con seguros"
+)
 @RestController
 @RequestMapping("/api/v1/seguros")
 public class SeguroController {
@@ -26,6 +35,22 @@ public class SeguroController {
     private static final Logger log =
             LoggerFactory.getLogger(SeguroController.class);
 
+
+    // Documenta el endpoint en Swagger
+    @Operation(
+            summary = "Listar seguros",
+            description = "Obtiene todos los seguros registrados"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Seguros obtenidos correctamente"
+            ),
+            @ApiResponse(
+                    responseCode = "500",
+                    description = "Error interno del servidor"
+            )
+    })
     // Listar todos los seguros
     @GetMapping
     public ResponseEntity<List<SeguroResponseDTO>> listar() {
@@ -37,7 +62,21 @@ public class SeguroController {
         );
     }
 
-    // Crear seguro
+    @Operation(
+            summary = "Crear seguro",
+            description = "Registra un nuevo seguro"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "201",
+                    description = "Seguro creado correctamente"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Datos inválidos"
+            )
+    })
+    // Guardad, Crear seguro
     @PostMapping
     public ResponseEntity<SeguroResponseDTO> guardar(
             @Valid @RequestBody SeguroRequestDTO dto) {
@@ -56,6 +95,20 @@ public class SeguroController {
                 .body(respuesta);
     }
 
+    @Operation(
+            summary = "Buscar seguro",
+            description = "Obtiene un seguro por su identificador"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Seguro encontrado"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Seguro no encontrado"
+            )
+    })
     // Buscar por ID
     @GetMapping("/{id}")
     public ResponseEntity<SeguroResponseDTO> buscar(
@@ -71,6 +124,24 @@ public class SeguroController {
         );
     }
 
+    @Operation(
+            summary = "Actualizar seguro",
+            description = "Actualiza un seguro existente"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Seguro actualizado correctamente"
+            ),
+            @ApiResponse(
+                    responseCode = "400",
+                    description = "Datos inválidos"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Seguro no encontrado"
+            )
+    })
     // Actualizar
     @PutMapping("/{id}")
     public ResponseEntity<SeguroResponseDTO> actualizar(
@@ -90,6 +161,20 @@ public class SeguroController {
         );
     }
 
+    @Operation(
+            summary = "Eliminar seguro",
+            description = "Elimina un seguro existente"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "204",
+                    description = "Seguro eliminado correctamente"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "Seguro no encontrado"
+            )
+    })
     // Eliminar
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> eliminar(
@@ -105,6 +190,20 @@ public class SeguroController {
         return ResponseEntity.noContent().build();
     }
 
+    @Operation(
+            summary = "Buscar por tipo",
+            description = "Obtiene los seguros asociados a un tipo"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Seguros encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No existen seguros para el tipo indicado"
+            )
+    })
     // Buscar por tipo
     @GetMapping("/tipo/{tipo}")
     public ResponseEntity<List<SeguroResponseDTO>> buscarPorTipo(
@@ -120,6 +219,21 @@ public class SeguroController {
         );
     }
 
+
+    @Operation(
+            summary = "Buscar por reserva",
+            description = "Obtiene los seguros asociados a una reserva"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Seguros encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No existen seguros para la reserva indicada"
+            )
+    })
     // Buscar por reserva
     @GetMapping("/reserva/{id}")
     public ResponseEntity<List<SeguroResponseDTO>> buscarPorReserva(
@@ -135,6 +249,20 @@ public class SeguroController {
         );
     }
 
+    @Operation(
+            summary = "Buscar seguros ordenados",
+            description = "Obtiene los seguros ordenados por cobertura descendente"
+    )
+    @ApiResponses({
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Seguros encontrados"
+            ),
+            @ApiResponse(
+                    responseCode = "404",
+                    description = "No existen seguros para el tipo indicado"
+            )
+    })
     // Buscar ordenados por cobertura
     @GetMapping("/tipo/ordenado/{tipo}")
     public ResponseEntity<List<SeguroResponseDTO>> buscarPorTipoOrdenado(

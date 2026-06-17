@@ -1,10 +1,38 @@
 package com.homerentsolution.msseguros.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+// Define la documentación del DTO de respuesta en Swagger
+@Schema(
+        name = "SeguroResponseDTO",
+        description = "Respuesta con información del seguro"
+)
 public class SeguroResponseDTO {
 
+    @Schema(
+            description = "Identificador único del seguro",
+            example = "1"
+    )
     private Long idSeguro;
+
+
+    @Schema(
+            description = "Tipo de seguro contratado",
+            example = "Premium"
+    )
     private String tipo;
+
+
+    @Schema(
+            description = "Monto de cobertura del seguro",
+            example = "500000"
+    )
     private Double cobertura;
+
+
+    @Schema(
+            description = "Identificador de la reserva asociada",
+            example = "1"
+    )
     private Long idReserva;
 
     public SeguroResponseDTO() {

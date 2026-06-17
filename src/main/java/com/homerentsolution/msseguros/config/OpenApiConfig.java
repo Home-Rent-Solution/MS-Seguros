@@ -7,18 +7,20 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
+//Configuracion general de Swagger/OpenApi
 public class OpenApiConfig {
 
+    // Define la informacion visible en Swagger UI
     @Bean
     public OpenAPI customOpenAPI() {
 
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("API Seguros")
-                                .version("1.0")
+                                .title("HomeRentSolution - API Seguros")
+                                .version("v1")
                                 .description(
-                                        "Microservicio de gestión de seguros Home Rent Solution"
+                                        "Microservicio encargado de la gestión de seguros "
                                 )
                 );
     }
