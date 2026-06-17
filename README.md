@@ -52,6 +52,13 @@ GET /api/v2/seguros
 
 GET /api/v2/seguros/{id}
 -------------------------------------------
+## Integraciones
+
+Este microservicio utiliza OpenFeign para comunicarse con:
+
+- MS-Reservas
+- MS-Pagos
+--------------------------------------------------------------
 ## Tecnologías
 
 * Java 25
@@ -59,5 +66,6 @@ GET /api/v2/seguros/{id}
 * Spring Data JPA
 * MySQL
 * OpenAPI / Swagger
+* OpenFeign
 * HATEOAS
 * Maven
