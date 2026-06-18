@@ -76,7 +76,7 @@ public class SeguroController {
                     description = "Datos inválidos"
             )
     })
-    // Guardad, Crear seguro
+    // Crear seguro
     @PostMapping
     public ResponseEntity<SeguroResponseDTO> guardar(
             @Valid @RequestBody SeguroRequestDTO dto) {

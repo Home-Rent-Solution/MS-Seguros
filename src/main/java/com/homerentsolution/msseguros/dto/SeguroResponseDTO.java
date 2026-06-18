@@ -1,6 +1,8 @@
 package com.homerentsolution.msseguros.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+
+
 // Define la documentación del DTO de respuesta en Swagger
 @Schema(
         name = "SeguroResponseDTO",

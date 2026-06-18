@@ -13,6 +13,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 // Controlador versión 2 con soporte HATEOAS
+// Pruebas:
+// GET http://localhost:8089/api/v2/seguros
+// GET http://localhost:8089/api/v2/seguros/1
+
 @RestController
 @RequestMapping("/api/v2/seguros")
 public class SeguroControllerV2 {
