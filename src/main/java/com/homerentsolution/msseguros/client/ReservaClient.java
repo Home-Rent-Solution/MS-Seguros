@@ -5,8 +5,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(
-        name = "ms-reservas",
-        url = "http://localhost:8084"
+        name = "ms-reservas"
 )
 public interface ReservaClient {
     @GetMapping("/reservas/{id}/admin")

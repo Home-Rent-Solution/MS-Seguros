@@ -3,9 +3,9 @@ spring:
     name: MS-Seguros
 
   datasource:
-    url: jdbc:mysql://localhost:3306/ms_seguros
+    url: jdbc:mysql://localhost:3306/db_seguros
     username: root
-    password: Duoc.2026
+    password: ""
     driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
@@ -16,6 +16,11 @@ spring:
     properties:
       hibernate:
         format_sql: true
+
+  eureka:
+    client:
+      service-url:
+        defaultZone: http://localhost:8761/eureka/
 
 server:
   port: 8089
