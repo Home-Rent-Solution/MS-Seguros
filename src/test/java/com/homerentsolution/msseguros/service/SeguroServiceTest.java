@@ -147,6 +147,47 @@ class SeguroServiceTest {
                 .save(any(Seguro.class));
     }
 
+    private SeguroRequestDTO seguroValido() {
+        SeguroRequestDTO dto = new SeguroRequestDTO();
+        dto.setTipo("premium");
+        dto.setCobertura(500000.0);
+        dto.setIdReserva(1L);
+        return dto;
+    }
+
+    @Test
+    void guardar_rechazaCoberturaInvalida() {
+        SeguroRequestDTO dto = seguroValido();
+        dto.setCobertura(0.0);
+        assertEquals("La cobertura debe ser mayor a 0",
+                assertThrows(RuntimeException.class, () -> service.guardar(dto)).getMessage());
+    }
+
+    @Test
+    void guardar_rechazaTipoInvalido() {
+        SeguroRequestDTO dto = seguroValido();
+        dto.setTipo("otro");
+        assertEquals("Tipo de seguro inválido",
+                assertThrows(RuntimeException.class, () -> service.guardar(dto)).getMessage());
+    }
+
+    @Test
+    void guardar_rechazaReservaInexistente() {
+        SeguroRequestDTO dto = seguroValido();
+        when(reservaClient.buscarReserva(1L)).thenReturn(null);
+        assertEquals("La reserva no existe",
+                assertThrows(RuntimeException.class, () -> service.guardar(dto)).getMessage());
+    }
+
+    @Test
+    void guardar_rechazaPagoInexistente() {
+        SeguroRequestDTO dto = seguroValido();
+        when(reservaClient.buscarReserva(1L)).thenReturn(new Object());
+        when(pagoClient.buscarPago(1L)).thenThrow(new RuntimeException("sin pago"));
+        assertEquals("No existe un pago válido asociado",
+                assertThrows(RuntimeException.class, () -> service.guardar(dto)).getMessage());
+    }
+
     @Test
     void actualizar_cuandoExiste_debeActualizarSeguro() {
 
@@ -192,6 +233,33 @@ class SeguroServiceTest {
     }
 
     @Test
+    void actualizar_rechazaSeguroInexistente() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+        assertEquals("Seguro no encontrado",
+                assertThrows(RuntimeException.class, () -> service.actualizar(99L, seguroValido())).getMessage());
+    }
+
+    @Test
+    void actualizar_rechazaCoberturaInvalida() {
+        Seguro existente = new Seguro();
+        SeguroRequestDTO dto = seguroValido();
+        dto.setCobertura(0.0);
+        when(repository.findById(1L)).thenReturn(Optional.of(existente));
+        assertEquals("La cobertura debe ser mayor a 0",
+                assertThrows(RuntimeException.class, () -> service.actualizar(1L, dto)).getMessage());
+    }
+
+    @Test
+    void actualizar_rechazaTipoInvalido() {
+        Seguro existente = new Seguro();
+        SeguroRequestDTO dto = seguroValido();
+        dto.setTipo("otro");
+        when(repository.findById(1L)).thenReturn(Optional.of(existente));
+        assertEquals("Tipo de seguro inválido",
+                assertThrows(RuntimeException.class, () -> service.actualizar(1L, dto)).getMessage());
+    }
+
+    @Test
     void eliminar_cuandoExiste_debeEliminarSeguro() {
 
         // GIVEN
@@ -211,6 +279,13 @@ class SeguroServiceTest {
         // THEN
         verify(repository, times(1))
                 .delete(seguro);
+    }
+
+    @Test
+    void eliminar_cuandoNoExiste_debeLanzarExcepcion() {
+        when(repository.findById(99L)).thenReturn(Optional.empty());
+        assertEquals("Seguro no encontrado",
+                assertThrows(RuntimeException.class, () -> service.eliminar(99L)).getMessage());
     }
 
     @Test
@@ -255,5 +330,26 @@ class SeguroServiceTest {
 
         // THEN
         assertEquals(1, resultado.size());
+    }
+
+    @Test
+    void buscarPorTipo_vacio_debeLanzarExcepcion() {
+        when(repository.findByTipo("premium")).thenReturn(List.of());
+        assertThrows(RuntimeException.class, () -> service.buscarPorTipo("premium"));
+    }
+
+    @Test
+    void buscarPorReserva_vacio_debeLanzarExcepcion() {
+        when(repository.findByIdReserva(1L)).thenReturn(List.of());
+        assertThrows(RuntimeException.class, () -> service.buscarPorReserva(1L));
+    }
+
+    @Test
+    void buscarPorTipoOrdenado_debeRetornarLista() {
+        Seguro seguro = new Seguro();
+        seguro.setTipo("premium");
+        seguro.setCobertura(500000.0);
+        when(repository.findByTipoOrderByCoberturaDesc("premium")).thenReturn(List.of(seguro));
+        assertEquals(1, service.buscarPorTipoOrdenado("premium").size());
     }
 }
