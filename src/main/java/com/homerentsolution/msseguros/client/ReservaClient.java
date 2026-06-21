@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
         name = "ms-reservas"
 )
 public interface ReservaClient {
-    @GetMapping("/api/reservas/{id}/admin")
+    @GetMapping("/api/v1/reservas/{id}/admin")
     Object buscarReserva(
             @PathVariable Long id
     );
