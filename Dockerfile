@@ -1,5 +1,5 @@
-https://github.com/Home-Rent-Solution/MS-Seguros.gitFROM maven:3.9.11-eclipse-temurin-25 AS build
-
+# Etapa 1: compilar el proyecto con Maven
+FROM maven:3.9.11-eclipse-temurin-25 AS build
 WORKDIR /workspace
 COPY pom.xml .
 COPY src ./src
