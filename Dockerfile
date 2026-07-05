@@ -3,7 +3,8 @@ https://github.com/Home-Rent-Solution/MS-Seguros.gitFROM maven:3.9.11-eclipse-te
 WORKDIR /workspace
 COPY pom.xml .
 COPY src ./src
-RUN mvn clean package -DskipTests
+RUN ./mvnw clean package -DskipTests
+
 FROM eclipse-temurin:25-jre
 WORKDIR /app
 COPY --from=build /workspace/target/*.jar app.jar
