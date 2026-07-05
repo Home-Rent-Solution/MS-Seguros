@@ -1,10 +1,9 @@
-FROM maven:3.9.11-eclipse-temurin-25 AS build
+https://github.com/Home-Rent-Solution/MS-Seguros.gitFROM maven:3.9.11-eclipse-temurin-25 AS build
 
 WORKDIR /workspace
 COPY pom.xml .
 COPY src ./src
-RUN --mount=type=cache,target=/root/.m2 mvn -B -DskipTests clean package
-
+RUN mvn clean package -DskipTests
 FROM eclipse-temurin:25-jre
 WORKDIR /app
 COPY --from=build /workspace/target/*.jar app.jar
